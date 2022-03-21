@@ -49,6 +49,7 @@ const background = new Sprite({
 })
 
 const animate = () => {
+  const velocity = 4;
   window.requestAnimationFrame(animate);
   background.draw();
   context.drawImage(playerImage,
@@ -59,16 +60,16 @@ const animate = () => {
   );
 
   if (keys.w.pressed && lastKey === 'w') {
-    background.position.y += 4;
+    background.position.y += velocity;
   }
   if (keys.s.pressed && lastKey === 's') {
-    background.position.y -= 4;
+    background.position.y -= velocity;
   }
   if (keys.a.pressed && lastKey === 'a') {
-    background.position.x += 4;
+    background.position.x += velocity;
   }
   if (keys.d.pressed && lastKey === 'd') {
-    background.position.x -= 4;
+    background.position.x -= velocity;
   }
 }
 animate();
