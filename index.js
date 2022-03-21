@@ -25,3 +25,24 @@ image.onload = () => {
     playerImage.width/4, playerImage.height
   );
 }
+
+window.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 'w':
+      console.log('pressed w');
+      
+      break;
+    case 'a':
+      console.log('pressed a');
+      
+      break;
+    case 's':
+      console.log('pressed s');
+      
+      break;
+    case 'd':
+      console.log('pressed d');
+      
+      break;
+  }
+})
