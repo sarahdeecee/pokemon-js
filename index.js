@@ -7,12 +7,16 @@ canvas.height = 576;
 context.fillStyle = 'white';
 context.fillRect(0, 0, canvas.width, canvas.height);
 
-// Import map image
+// Load map image
 const image = new Image();
 image.src = './assets/map.png'
-image.onload = () => {
-  context.drawImage(image,-200,-1100)
-}
 
+// Load character sprite
 const playerImage = new Image();
-playerImage.src = 'assets/playerDown.png';
+playerImage.src = './assets/playerDown.png';
+
+// Draw background image and character sprite
+image.onload = () => {
+  context.drawImage(image,-200,-1100);
+  context.drawImage(playerImage, 0, 0);
+}
