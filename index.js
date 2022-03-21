@@ -15,9 +15,27 @@ image.src = './assets/map.png'
 const playerImage = new Image();
 playerImage.src = './assets/playerDown.png';
 
-// Draw background image and character sprite
-image.onload = () => {
-  context.drawImage(image,-209,-1130);
+class Sprite {
+  constructor({position, velocity, image}) {
+    this.position = position;
+    this.image = image;
+  }
+  draw() {
+    context.drawImage(this.image,-209,-1130);
+  }
+}
+
+const background = new Sprite({
+  position: {
+    x: -209,
+    y: -1130
+  },
+  image: image
+})
+
+const animate = () => {
+  window.requestAnimationFrame(animate);
+  background.draw();
   context.drawImage(playerImage,
     0, 0, playerImage.width/4, playerImage.height,
     (canvas.width/2 - (playerImage.width/4)/2),
@@ -25,24 +43,25 @@ image.onload = () => {
     playerImage.width/4, playerImage.height
   );
 }
+animate();
 
 window.addEventListener('keydown', (e) => {
   switch (e.key) {
     case 'w':
       console.log('pressed w');
-      
+
       break;
     case 'a':
       console.log('pressed a');
-      
+
       break;
     case 's':
       console.log('pressed s');
-      
+
       break;
     case 'd':
       console.log('pressed d');
-      
+
       break;
   }
 })
