@@ -13,3 +13,6 @@ image.src = './assets/map.png'
 image.onload = () => {
   context.drawImage(image,-200,-1100)
 }
+
+const playerImage = new Image();
+playerImage.src = 'assets/playerDown.png';
