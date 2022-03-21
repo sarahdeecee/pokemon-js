@@ -3,6 +3,43 @@ const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
+const tilesWidth = 70;
+const tileWidth = 12;
+const tileHeight = 12;
+const zoom = 4;
+
+const collisionsMap = [];
+for (let i = 0; i < collisions.length; i+= tilesWidth) {
+  collisionsMap.push(collisions.slice(i, i + tilesWidth));
+  console.log(collisionsMap);
+}
+
+class Boundary {
+  static width = tileWidth * zoom;
+  static height = tileHeight * zoom;
+  constructor({position}) {
+    this.position = position;
+    this.width = tileWidth * zoom;
+    this.height = tileHeight * zoom;
+  }
+  
+  draw() {
+    context.fillStyle = 'red';
+    context.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+}
+
+const boundaries = [];
+collisionsMap.forEach((row, rowIndex) => {
+  row.forEach((symbol, symbolIndex) => {
+    if (symbol === 1025) {
+      boundaries.push(new Boundary({position: {
+        x: symbolIndex * tileWidth * zoom,
+        y: rowIndex * tileWidth * zoom
+      }}))
+    }
+  })
+})
 
 context.fillStyle = 'white';
 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -52,6 +89,9 @@ const animate = () => {
   const velocity = 4;
   window.requestAnimationFrame(animate);
   background.draw();
+  boundaries.forEach(boundary => {
+    boundary.draw();
+  })
   context.drawImage(playerImage,
     0, 0, playerImage.width/4, playerImage.height,
     (canvas.width/2 - (playerImage.width/4)/2),
