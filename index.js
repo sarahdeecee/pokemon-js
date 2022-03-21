@@ -18,5 +18,8 @@ playerImage.src = './assets/playerDown.png';
 // Draw background image and character sprite
 image.onload = () => {
   context.drawImage(image,-200,-1100);
-  context.drawImage(playerImage, 0, 0);
+  context.drawImage(playerImage,
+    (canvas.width/2 - playerImage.width/2),
+    (canvas.height/2 - playerImage.height/2)
+  );
 }
