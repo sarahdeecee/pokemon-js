@@ -106,7 +106,9 @@ const animate = () => {
   foreground.draw();
   
   let moving = true;
+  player.moving = false;
   if (keys.w.pressed && lastKey === 'w') {
+    player.moving = true;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and north boundary
       const boundary = boundaries[i];
@@ -128,6 +130,7 @@ const animate = () => {
     }
   }
   if (keys.s.pressed && lastKey === 's') {
+    player.moving = true;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and south boundary
       const boundary = boundaries[i];
@@ -149,6 +152,7 @@ const animate = () => {
     }
   }
   if (keys.a.pressed && lastKey === 'a') {
+    player.moving = true;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and east boundary
       const boundary = boundaries[i];
@@ -170,6 +174,7 @@ const animate = () => {
     }
   }
   if (keys.d.pressed && lastKey === 'd') {
+    player.moving = true;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and west boundary
       const boundary = boundaries[i];
