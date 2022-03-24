@@ -34,7 +34,7 @@ class Boundary {
 const boundaries = [];
 const offset = {
   x: -209,
-  y: -1130
+  y: -1140
 }
 collisionsMap.forEach((row, rowIndex) => {
   row.forEach((symbol, symbolIndex) => {
@@ -133,28 +133,93 @@ const animate = () => {
   boundaries.forEach(boundary => {
     boundary.draw();
 
-    // Check for collision between sprite and boundaries
-    if (rectangularCollision({
-      rectangle1: player,
-      rectangle2: boundary
-      })) {
-      console.log('colliding');
-    }
   })
   player.draw();
-
-
+  
+  let moving = true;
   if (keys.w.pressed && lastKey === 'w') {
-    movables.forEach(layer => layer.position.y += velocity);
+    for (let i = 0; i < boundaries.length; i++) {
+      // Check for collision between sprite and north boundary
+      const boundary = boundaries[i];
+      if (rectangularCollision({
+        rectangle1: player,
+        rectangle2: {...boundary, position: {
+          x: boundary.position.x,
+          y: boundary.position.y + velocity
+        }}
+        })) {
+        console.log('colliding');
+        moving = false;
+        break;
+      }
+    }
+
+    if (moving) {
+      movables.forEach(layer => layer.position.y += velocity);
+    }
   }
   if (keys.s.pressed && lastKey === 's') {
+    for (let i = 0; i < boundaries.length; i++) {
+      // Check for collision between sprite and south boundary
+      const boundary = boundaries[i];
+      if (rectangularCollision({
+        rectangle1: player,
+        rectangle2: {...boundary, position: {
+          x: boundary.position.x,
+          y: boundary.position.y - velocity
+        }}
+        })) {
+        console.log('colliding');
+        moving = false;
+        break;
+      }
+    }
+
+    if (moving) {
     movables.forEach(layer => layer.position.y -= velocity);
+    }
   }
   if (keys.a.pressed && lastKey === 'a') {
+    for (let i = 0; i < boundaries.length; i++) {
+      // Check for collision between sprite and east boundary
+      const boundary = boundaries[i];
+      if (rectangularCollision({
+        rectangle1: player,
+        rectangle2: {...boundary, position: {
+          x: boundary.position.x + velocity,
+          y: boundary.position.y
+        }}
+        })) {
+        console.log('colliding');
+        moving = false;
+        break;
+      }
+    }
+
+    if (moving) {
     movables.forEach(layer => layer.position.x += velocity);
+    }
   }
   if (keys.d.pressed && lastKey === 'd') {
+    for (let i = 0; i < boundaries.length; i++) {
+      // Check for collision between sprite and west boundary
+      const boundary = boundaries[i];
+      if (rectangularCollision({
+        rectangle1: player,
+        rectangle2: {...boundary, position: {
+          x: boundary.position.x - velocity,
+          y: boundary.position.y
+        }}
+        })) {
+        console.log('colliding');
+        moving = false;
+        break;
+      }
+    }
+
+    if (moving) {
     movables.forEach(layer => layer.position.x -= velocity);
+    }
   }
 }
 animate();
