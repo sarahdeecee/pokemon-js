@@ -32,8 +32,12 @@ context.fillStyle = 'white';
 context.fillRect(0, 0, canvas.width, canvas.height);
 
 // Load map image
-const image = new Image();
-image.src = './assets/map.png'
+const backgroundImage = new Image();
+backgroundImage.src = './assets/map.png'
+
+// Load map foreground image
+const foregroundImage = new Image();
+foregroundImage.src = './assets/map-foreground.png'
 
 // Load character sprite
 const playerImage = new Image();
@@ -69,19 +73,18 @@ const background = new Sprite({
     x: offset.x,
     y: offset.y
   },
-  image: image
+  image: backgroundImage
 })
 const foreground = new Sprite({
   position: {
     x: offset.x,
     y: offset.y
   },
-  image: image
+  image: foregroundImage
 })
 
-
 // Move background and collisions together
-const movables = [background, ...boundaries];
+const movables = [background, ...boundaries, foreground];
 
 //Check for collision
 const rectangularCollision = ({rectangle1, rectangle2}) => {
@@ -100,6 +103,7 @@ const animate = () => {
 
   })
   player.draw();
+  foreground.draw();
   
   let moving = true;
   if (keys.w.pressed && lastKey === 'w') {
