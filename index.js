@@ -63,6 +63,10 @@ class Sprite {
     this.position = position;
     this.image = image;
     this.frames = frames;
+    this.image.onload = () => {
+      this.width = this.image.width / this.frames.max;
+      this.height = this.image.height;
+    }
   }
   draw() {
     // context.drawImage(this.image,this.position.x,this.position.y);
@@ -100,7 +104,7 @@ const player = new Sprite({
   image: playerImage,
   frames: {
     max: 4
-  }
+  },
 })
 const testBoundary = new Boundary({
   position: {
@@ -119,6 +123,15 @@ const background = new Sprite({
 
 // Move background and collisions together
 const movables = [background, testBoundary];
+
+//Check for collision
+const rectangularCollision = ({rectangle1, rectangle2}) => {
+  return (rectangle1.position.x + rectangle1.width >= rectangle2.position.x
+    && rectangle1.position.x <= rectangle2.position.x + rectangle2.width
+    && rectangle1.position.y <= rectangle2.position.y + rectangle2.height
+    && rectangle1.position.y + rectangle1.height >= rectangle2.position.y)
+};
+
 const animate = () => {
   const velocity = 4;
   window.requestAnimationFrame(animate);
@@ -128,6 +141,14 @@ const animate = () => {
   // })
   testBoundary.draw();
   player.draw();
+
+  // Check for collision between sprite and boundaries
+  if (rectangularCollision({
+    rectangle1: player,
+    rectangle2: testBoundary
+    })) {
+    console.log('colliding');
+  }
 
   if (keys.w.pressed && lastKey === 'w') {
     movables.forEach(layer => layer.position.y += velocity);
