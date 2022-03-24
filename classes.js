@@ -6,7 +6,7 @@ const tileHeight = 12;
 const zoom = 4;
 
 class Sprite {
-  constructor({position, velocity, image, frames = {max: 1}}) {
+  constructor({position, velocity, image, frames = {max: 1}, sprites}) {
     this.position = position;
     this.image = image;
     this.frames = {...frames, val: 0, elapsed: 0};
@@ -15,6 +15,7 @@ class Sprite {
       this.height = this.image.height;
     }
     this.moving = false;
+    this.sprites = sprites;
   }
   draw() {
     // context.drawImage(this.image,this.position.x,this.position.y);
@@ -29,7 +30,7 @@ class Sprite {
     );
 
     if (!this.moving) return;
-    
+
     if (this.frames.max > 1) {
       this.frames.elapsed++;
     }

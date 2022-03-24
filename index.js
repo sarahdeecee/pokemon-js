@@ -39,9 +39,15 @@ backgroundImage.src = './assets/map.png'
 const foregroundImage = new Image();
 foregroundImage.src = './assets/map-foreground.png'
 
-// Load character sprite
-const playerImage = new Image();
-playerImage.src = './assets/playerDown.png';
+// Load character sprites
+const playerDownImage = new Image();
+playerDownImage.src = './assets/playerDown.png';
+const playerUpImage = new Image();
+playerUpImage.src = './assets/playerUp.png';
+const playerLeftImage = new Image();
+playerLeftImage.src = './assets/playerLeft.png';
+const playerRightImage = new Image();
+playerRightImage.src = './assets/playerRight.png';
 
 const keys = {
   w: {
@@ -63,10 +69,16 @@ const player = new Sprite({
     x: canvas.width/2 - (playerImageWidth/4)/2,
     y: canvas.height/2 - playerImageHeight/2,
   },
-  image: playerImage,
+  image: playerDownImage,
   frames: {
     max: 4
   },
+  sprites: {
+    up: playerUpImage,
+    down: playerDownImage,
+    left: playerLeftImage,
+    right: playerRightImage
+  }
 })
 const background = new Sprite({
   position: {
@@ -103,12 +115,15 @@ const animate = () => {
 
   })
   player.draw();
+  console.log(player);
   foreground.draw();
   
   let moving = true;
   player.moving = false;
-  if (keys.w.pressed && lastKey === 'w') {
+  
+  if (keys.w.pressed && lastKey === 'w') { // Move up
     player.moving = true;
+    player.image = player.sprites.up;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and north boundary
       const boundary = boundaries[i];
@@ -128,9 +143,9 @@ const animate = () => {
     if (moving) {
       movables.forEach(layer => layer.position.y += velocity);
     }
-  }
-  if (keys.s.pressed && lastKey === 's') {
+  } else if (keys.s.pressed && lastKey === 's') { // Move down
     player.moving = true;
+    player.image = player.sprites.down;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and south boundary
       const boundary = boundaries[i];
@@ -150,9 +165,9 @@ const animate = () => {
     if (moving) {
     movables.forEach(layer => layer.position.y -= velocity);
     }
-  }
-  if (keys.a.pressed && lastKey === 'a') {
+  } else if (keys.a.pressed && lastKey === 'a') { // Move left
     player.moving = true;
+    player.image = player.sprites.left;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and east boundary
       const boundary = boundaries[i];
@@ -172,9 +187,9 @@ const animate = () => {
     if (moving) {
     movables.forEach(layer => layer.position.x += velocity);
     }
-  }
-  if (keys.d.pressed && lastKey === 'd') {
+  } else if (keys.d.pressed && lastKey === 'd') { // Move right
     player.moving = true;
+    player.image = player.sprites.right;
     for (let i = 0; i < boundaries.length; i++) {
       // Check for collision between sprite and west boundary
       const boundary = boundaries[i];
