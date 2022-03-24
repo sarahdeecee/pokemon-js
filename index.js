@@ -3,10 +3,6 @@ const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
-const tilesWidth = 70;
-const tileWidth = 12;
-const tileHeight = 12;
-const zoom = 4;
 const playerImageWidth = 192;
 const playerImageHeight = 68;
 
@@ -14,21 +10,6 @@ const collisionsMap = [];
 for (let i = 0; i < collisions.length; i+= tilesWidth) {
   collisionsMap.push(collisions.slice(i, i + tilesWidth));
   console.log(collisionsMap);
-}
-
-class Boundary {
-  static width = tileWidth * zoom;
-  static height = tileHeight * zoom;
-  constructor({position}) {
-    this.position = position;
-    this.width = tileWidth * zoom;
-    this.height = tileHeight * zoom;
-  }
-  
-  draw() {
-    context.fillStyle = 'rgba(255,0,0,0.2)';
-    context.fillRect(this.position.x, this.position.y, this.width, this.height);
-  }
 }
 
 const boundaries = [];
@@ -58,29 +39,6 @@ image.src = './assets/map.png'
 const playerImage = new Image();
 playerImage.src = './assets/playerDown.png';
 
-class Sprite {
-  constructor({position, velocity, image, frames = {max: 1}}) {
-    this.position = position;
-    this.image = image;
-    this.frames = frames;
-    this.image.onload = () => {
-      this.width = this.image.width / this.frames.max;
-      this.height = this.image.height;
-    }
-  }
-  draw() {
-    // context.drawImage(this.image,this.position.x,this.position.y);
-    context.drawImage(
-      this.image,
-      0, 0, this.image.width/this.frames.max, this.image.height,
-      this.position.x,
-      this.position.y,
-      this.image.width/this.frames.max,
-      this.image.height
-    );
-  }
-}
-
 const keys = {
   w: {
     pressed: false
@@ -107,6 +65,13 @@ const player = new Sprite({
   },
 })
 const background = new Sprite({
+  position: {
+    x: offset.x,
+    y: offset.y
+  },
+  image: image
+})
+const foreground = new Sprite({
   position: {
     x: offset.x,
     y: offset.y
