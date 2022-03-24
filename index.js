@@ -106,12 +106,6 @@ const player = new Sprite({
     max: 4
   },
 })
-const testBoundary = new Boundary({
-  position: {
-    x: 400,
-    y: 400
-  }
-})
 const background = new Sprite({
   position: {
     x: offset.x,
@@ -122,7 +116,7 @@ const background = new Sprite({
 
 
 // Move background and collisions together
-const movables = [background, testBoundary];
+const movables = [background, ...boundaries];
 
 //Check for collision
 const rectangularCollision = ({rectangle1, rectangle2}) => {
@@ -136,19 +130,19 @@ const animate = () => {
   const velocity = 4;
   window.requestAnimationFrame(animate);
   background.draw();
-  // boundaries.forEach(boundary => {
-  //   boundary.draw();
-  // })
-  testBoundary.draw();
+  boundaries.forEach(boundary => {
+    boundary.draw();
+
+    // Check for collision between sprite and boundaries
+    if (rectangularCollision({
+      rectangle1: player,
+      rectangle2: boundary
+      })) {
+      console.log('colliding');
+    }
+  })
   player.draw();
 
-  // Check for collision between sprite and boundaries
-  if (rectangularCollision({
-    rectangle1: player,
-    rectangle2: testBoundary
-    })) {
-    console.log('colliding');
-  }
 
   if (keys.w.pressed && lastKey === 'w') {
     movables.forEach(layer => layer.position.y += velocity);
