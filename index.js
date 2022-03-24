@@ -7,6 +7,8 @@ const tilesWidth = 70;
 const tileWidth = 12;
 const tileHeight = 12;
 const zoom = 4;
+const playerImageWidth = 192;
+const playerImageHeight = 68;
 
 const collisionsMap = [];
 for (let i = 0; i < collisions.length; i+= tilesWidth) {
@@ -30,12 +32,16 @@ class Boundary {
 }
 
 const boundaries = [];
+const offset = {
+  x: -209,
+  y: -1130
+}
 collisionsMap.forEach((row, rowIndex) => {
   row.forEach((symbol, symbolIndex) => {
     if (symbol === 1025) {
       boundaries.push(new Boundary({position: {
-        x: symbolIndex * tileWidth * zoom,
-        y: rowIndex * tileWidth * zoom
+        x: symbolIndex * Boundary.width + offset.x,
+        y: rowIndex * Boundary.height + offset.y
       }}))
     }
   })
@@ -53,12 +59,21 @@ const playerImage = new Image();
 playerImage.src = './assets/playerDown.png';
 
 class Sprite {
-  constructor({position, velocity, image}) {
+  constructor({position, velocity, image, frames = {max: 1}}) {
     this.position = position;
     this.image = image;
+    this.frames = frames;
   }
   draw() {
-    context.drawImage(this.image,this.position.x,this.position.y);
+    // context.drawImage(this.image,this.position.x,this.position.y);
+    context.drawImage(
+      this.image,
+      0, 0, this.image.width/this.frames.max, this.image.height,
+      this.position.x,
+      this.position.y,
+      this.image.width/this.frames.max,
+      this.image.height
+    );
   }
 }
 
@@ -77,39 +92,54 @@ const keys = {
   }
 }
 
+const player = new Sprite({
+  position: {
+    x: canvas.width/2 - (playerImageWidth/4)/2,
+    y: canvas.height/2 - playerImageHeight/2,
+  },
+  image: playerImage,
+  frames: {
+    max: 4
+  }
+})
+const testBoundary = new Boundary({
+  position: {
+    x: 400,
+    y: 400
+  }
+})
 const background = new Sprite({
   position: {
-    x: -209,
-    y: -1130
+    x: offset.x,
+    y: offset.y
   },
   image: image
 })
 
+
+// Move background and collisions together
+const movables = [background, testBoundary];
 const animate = () => {
   const velocity = 4;
   window.requestAnimationFrame(animate);
   background.draw();
-  boundaries.forEach(boundary => {
-    boundary.draw();
-  })
-  context.drawImage(playerImage,
-    0, 0, playerImage.width/4, playerImage.height,
-    (canvas.width/2 - (playerImage.width/4)/2),
-    (canvas.height/2 - playerImage.height/2),
-    playerImage.width/4, playerImage.height
-  );
+  // boundaries.forEach(boundary => {
+  //   boundary.draw();
+  // })
+  testBoundary.draw();
+  player.draw();
 
   if (keys.w.pressed && lastKey === 'w') {
-    background.position.y += velocity;
+    movables.forEach(layer => layer.position.y += velocity);
   }
   if (keys.s.pressed && lastKey === 's') {
-    background.position.y -= velocity;
+    movables.forEach(layer => layer.position.y -= velocity);
   }
   if (keys.a.pressed && lastKey === 'a') {
-    background.position.x += velocity;
+    movables.forEach(layer => layer.position.x += velocity);
   }
   if (keys.d.pressed && lastKey === 'd') {
-    background.position.x -= velocity;
+    movables.forEach(layer => layer.position.x -= velocity);
   }
 }
 animate();
